@@ -44,8 +44,21 @@ class MiniMoto
     void brake();
     byte getFault();
   private:
-    void I2CWriteBytes(byte addr, byte *buffer, byte len);
-    void I2CReadBytes(byte addr, byte *buffer, byte len);
+    // I2CwriteByte() -- Write a byte out of I2C to a register in the device
+    // Input:
+    //  - address = The 7-bit I2C address of the slave device.
+    //  - subAddress = The register to be written to.
+    //  - data = Byte to be written to the register.
+    void I2CwriteByte(uint8_t address, uint8_t subAddress, uint8_t data);
+    
+    // I2CreadByte() -- Read a single byte from a register over I2C.
+    // Input:
+    //  - address = The 7-bit I2C address of the slave device.
+    //  - subAddress = The register to be read from.
+    // Output:
+    //  - The byte read from the requested address.
+    uint8_t I2CreadByte(uint8_t address, uint8_t subAddress);
+    
     byte _addr;
 };
 
