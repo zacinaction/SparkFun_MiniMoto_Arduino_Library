@@ -21,12 +21,7 @@ Code developed in Arduino 1.0.5, on a Fio classic board.
 #include <Arduino.h>
 
 // I2C support constants
-#define I2C_READ    0x01 // I2C read bit set
-// Some values we'll load into TWCR a lot
-#define START_COND  0xA4 // (1<<TWINT) | (1<<TWSTA) | (1<<TWEN)
-#define STOP_COND   0x94 // (1<<TWINT) | (1<<TWSTO) | (1<<TWEN)
-#define CLEAR_TWINT 0x84 // (1<<TWINT) | (1<<TWEN)
-#define NEXT_BYTE   0xC4 // (1<<TWINT) | (1<<TWEA) | (1<<TWEN)
+#define DRV8830_COMMUNICATION_TIMEOUT 15
 
 // Fault constants
 #define FAULT 0x01
@@ -39,27 +34,29 @@ class MiniMoto
 {
   public:
     MiniMoto(byte addr);
+    void init();
     void drive(int speed);
     void stop();
     void brake();
-    byte getFault();
+    uint8_t getFault();
+
   private:
-    // I2CwriteByte() -- Write a byte out of I2C to a register in the device
-    // Input:
-    //  - address = The 7-bit I2C address of the slave device.
-    //  - subAddress = The register to be written to.
-    //  - data = Byte to be written to the register.
-    void I2CwriteByte(uint8_t address, uint8_t subAddress, uint8_t data);
-    
-    // I2CreadByte() -- Read a single byte from a register over I2C.
+    // I2CReadByte() -- Read a single byte from a register over I2C.
     // Input:
     //  - address = The 7-bit I2C address of the slave device.
     //  - subAddress = The register to be read from.
     // Output:
     //  - The byte read from the requested address.
-    uint8_t I2CreadByte(uint8_t address, uint8_t subAddress);
+    uint8_t I2CReadByte(uint8_t address, uint8_t subAddress);
+
+    // I2CWriteByte() -- Write a byte out of I2C to a register in the device
+    // Input:
+    //  - address = The 7-bit I2C address of the slave device.
+    //  - subAddress = The register to be written to.
+    //  - data = Byte to be written to the register.
+    void I2CWriteByte(uint8_t address, uint8_t subAddress, uint8_t data);
     
-    byte _addr;
+    uint8_t _addr;
 };
 
 #endif
